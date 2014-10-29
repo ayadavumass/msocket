@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="MacRoman" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2014-08-23T22:17:48</date>
+  <millis>1408846668927</millis>
+  <sequence>0</sequence>
+  <logger>edu.umass.cs.gns.client.GNSClient</logger>
+  <level>INFO</level>
+  <class>edu.umass.cs.gns.client.UniversalHttpClient</class>
+  <method>desktopSendGetCommmand</method>
+  <thread>10</thread>
+  <message>Get Response timed out. Trying 1 more times. Query is lookupGuid?name=</message>
+</record>
+<record>
+  <date>2014-08-23T22:17:59</date>
+  <millis>1408846679178</millis>
+  <sequence>1</sequence>
+  <logger>edu.umass.cs.gns.client.GNSClient</logger>
+  <level>INFO</level>
+  <class>edu.umass.cs.gns.client.UniversalHttpClient</class>
+  <method>desktopSendGetCommmand</method>
+  <thread>10</thread>
+  <message>Get Response timed out. Trying 0 more times. Query is lookupGuid?name=</message>
+</record>
+</log>

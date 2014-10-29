@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+
+<project name="mSocket Proxy console" basedir="." default="jar">
+
+  <!-- Directories -->
+  <property name="build.dir" value="build" />
+  <property name="src.dir" value="src" />
+  <property name="lib.dir" value="lib" />
+  <property name="release.dir" value="release" />
+
+  <!-- Properties -->
+  <property file="build.properties" />
+
+  <!-- Classpath definitions -->
+  <path id="classpath.base">
+    <fileset dir="${lib.dir}" includes="**/*.jar" />
+  </path>
+
+  <!-- Init -->
+  <target name="init">
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${release.dir}" />
+  </target>
+
+  <!-- Clean -->
+  <target name="clean">
+    <delete dir="${build.dir}" />
+    <delete dir="${release.dir}" failonerror="false" />
+  </target>
+
+  <!-- Compile -->
+  <target name="compile" depends="init" description="Compile the mSocket code">
+
+    <!-- Compile the lib and tools but not the tests -->
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           debug="on"
+           source="1.6"
+           target="1.6">
+      <classpath refid="classpath.base" />
+    </javac>
+  </target>
+
+  <!-- Documentation -->
+  <target name="doc" depends="compile" description="Builds the Javadoc">
+    <javadoc packagenames="edu.*"
+             sourcepath="${src.dir}"
+             destdir="${build.dir}/docs/api"
+             author="true"
+             version="true"
+             use="true"
+             public="true"
+             windowtitle="mSocket library API (specification ${VERSION}-${RELEASE})">
+      <doctitle>
+        <![CDATA[<h1>mSocket library API (specification ${VERSION}-${RELEASE})</h1>]]>
+      </doctitle>
+    <bottom>
+      <![CDATA[<i>Copyright &#169; 2013-2014 University of Massachusetts - All Rights Reserved.</i>]]>
+    </bottom>
+  <classpath refid="classpath.base" />
+</javadoc>
+</target>
+
+
+<!-- Release -->
+<target name="jar"
+        depends="msocket-jar,msocket-nodoc-jar,msocket-proxy-console-jar,doc"
+        description="Build both mSocket and proxy jars" />
+
+<target name="msocket-nodoc-jar"
+        depends="clean,compile"
+        description="Builds the mSocket Jar">
+<jar jarfile="${release.dir}/msocket-nodoc-${VERSION}-${RELEASE}.jar">
+  <fileset dir="${build.dir}/">
+    <exclude name="docs/**" />
+    <exclude name="edu/umass/cs/msocket/proxy/**" />
+    <exclude name="edu/umass/cs/msocket/watchdog/**" />
+  </fileset>
+  <fileset dir="${basedir}">
+    <include name="topLevelDomainNames.txt" />
+  </fileset>
+  <zipgroupfileset dir="${lib.dir}/" includes="gns-lib*.jar,log4j*.jar"/>
+  <manifest>
+    <attribute name="Built-By" value="Emmanuel Cecchet" />
+    <!-- Information about the program itself -->
+    <attribute name="Implementation-Vendor"
+               value="University of Massachusetts" />
+    <attribute name="Implementation-Title" value="mSocket" />
+    <attribute name="Implementation-Version" value="${VERSION}-${RELEASE}" />
+  </manifest>
+</jar>
+</target>
+<target name="msocket-jar"
+        depends="clean,compile"
+        description="Builds the mSocket Jar">
+<jar jarfile="${release.dir}/msocket-${VERSION}-${RELEASE}.jar">
+  <fileset dir="${build.dir}/">
+    <exclude name="edu/umass/cs/msocket/proxy/**" />
+    <exclude name="edu/umass/cs/msocket/watchdog/**" />
+  </fileset>
+  <fileset dir="${basedir}">
+    <include name="topLevelDomainNames.txt" />
+  </fileset>
+  <zipgroupfileset dir="${lib.dir}/" includes="gns-lib*.jar,log4j*.jar"/>
+  <manifest>
+    <attribute name="Built-By" value="Emmanuel Cecchet" />
+    <!-- Information about the program itself -->
+    <attribute name="Implementation-Vendor"
+               value="University of Massachusetts" />
+    <attribute name="Implementation-Title" value="mSocket" />
+    <attribute name="Implementation-Version" value="${VERSION}-${RELEASE}" />
+  </manifest>
+</jar>
+</target>
+<target name="msocket-proxy-console-jar"
+        depends="clean,compile"
+        description="Builds the proxy console Jar">
+<jar jarfile="${release.dir}/msocket-proxy-console-${VERSION}-${RELEASE}.jar">
+  <fileset dir="${build.dir}/" />
+  <fileset dir="${src.dir}">
+    <include name="edu/umass/cs/msocket/proxy/console/console.ini" />
+  </fileset>
+  <zipgroupfileset dir="${lib.dir}/" includes="*.jar" />
+  <manifest>
+    <attribute name="Built-By" value="Emmanuel Cecchet" />
+    <!-- Information about the program itself -->
+    <attribute name="Implementation-Vendor"
+               value="University of Massachusetts" />
+    <attribute name="Implementation-Title" value="mSocket Proxy Console" />
+    <attribute name="Implementation-Version" value="${VERSION}${RELEASE}" />
+    <attribute name="Main-Class"
+               value="edu.umass.cs.msocket.proxy.ProxyConsoleMain" />
+    <attribute name="Class-Path" value="${jar.classpath}" />
+  </manifest>
+</jar>
+</target>
+
+</project>
